@@ -28,5 +28,12 @@ namespace RepositoryLayer
         {
             return await users.FindAsync(id);
         }
+
+        public async Task<AppUser> Register(AppUser user)
+        {
+            await users.AddAsync(user);
+            await _applicationDbContext.SaveChangesAsync();
+            return await users.Where(x=> x == user).SingleOrDefaultAsync();
+        }
     }
 }

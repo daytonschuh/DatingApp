@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using ModelLayer;
 using BusinessLogicLayer;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController: ControllerBase
+    public class UsersController: BaseApiController
     {
         private readonly BusinessLogicClass _businessLogicClass;
         public UsersController(BusinessLogicClass businessLogicClass)
@@ -19,12 +18,14 @@ namespace Controllers
 
         // Get all users
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IEnumerable<AppUser>> GetUsers()
         {
             return await _businessLogicClass.GetUsers();
         }
 
         // Get a single user
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<AppUser> GetUser(int id)
         {

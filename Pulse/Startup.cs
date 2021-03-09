@@ -6,7 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Interfaces;
 using RepositoryLayer;
+using Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Extensions;
 
 namespace Pulse
 {
@@ -21,15 +26,10 @@ namespace Pulse
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationServices(_config);
+            services.AddIdentityServices(_config);
             services.AddControllers();
-            services.AddScoped<Repository>();
-            services.AddScoped<BusinessLogicClass>();
-            services.AddScoped<ApplicationDbContext>();
-
-            services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
-            });
+            services.AddCors();
 
             services.AddSwaggerGen(c =>
             {
@@ -51,6 +51,9 @@ namespace Pulse
 
             app.UseRouting();
 
+            app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
