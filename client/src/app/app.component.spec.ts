@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 describe('AppComponent', () => {
   beforeEach(async () => {

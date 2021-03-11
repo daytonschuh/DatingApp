@@ -67,6 +67,9 @@ namespace BusinessLogicLayer
         // This method is not async -- Hence why we return Task.FromResult
         public Task<UserDto> CheckPassword(AppUser user, string password)
         {
+            // Convert AppUser to UserDto
+            UserDto udto = _mapperClass.ConvertAppUserToUserDto(user);
+
             // Instantiate an hmac security
             using var hmac = new HMACSHA512(user.PasswordSalt);
 
@@ -76,11 +79,9 @@ namespace BusinessLogicLayer
             // Check for any inconsistencies in the passwords
             for(int i = 0; i < computedHash.Length; i++){
                 // If we find a problem, return null
-                if(computedHash[i] != user.PasswordHash[i]) return null;
+                if(computedHash[i] != user.PasswordHash[i]) return Task.FromResult(udto);
             }
 
-            // Convert AppUser to UserDto
-            UserDto udto = _mapperClass.ConvertAppUserToUserDto(user);
             udto.Token = _tokenService.CreateToken(user);
 
             // Return UserDto

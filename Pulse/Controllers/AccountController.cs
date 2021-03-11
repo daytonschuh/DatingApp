@@ -36,8 +36,11 @@ namespace Controllers
                 return Unauthorized("Username is invalid");
             }
 
-            UserDto udto = await _businessLogicClass.CheckPassword(user, loginDto.Password);
-            if(udto == null){
+            var udto = await _businessLogicClass.CheckPassword(user, loginDto.Password);
+
+            // Token only gets set when login passes password check.
+            // So if the token is null, it failed password check.
+            if(udto.Token == null){
                 return Unauthorized("Password is invalid");
             }
 
