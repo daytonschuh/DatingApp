@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Controllers
 {
+    [Authorize]
     public class UsersController: BaseApiController
     {
         private readonly BusinessLogicClass _businessLogicClass;
@@ -18,7 +19,6 @@ namespace Controllers
 
         // Get all users
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IEnumerable<AppUser>> GetUsers()
         {
             return await _businessLogicClass.GetUsers();
