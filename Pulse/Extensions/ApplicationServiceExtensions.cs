@@ -21,6 +21,7 @@ namespace Extensions
             services.AddScoped<Repository>();
             services.AddScoped<BusinessLogicClass>();
             services.AddScoped<ApplicationDbContext>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }

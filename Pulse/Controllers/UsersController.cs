@@ -19,9 +19,9 @@ namespace Controllers
 
         // Get all users
         [HttpGet]
-        public async Task<IEnumerable<AppUser>> GetUsers()
+        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
-            return await _businessLogicClass.GetUsers();
+            return Ok(await _businessLogicClass.GetUsers());
         }
 
         // Get a single user
