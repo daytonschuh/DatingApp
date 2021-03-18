@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using AutoMapper;
+using DTOs;
 using Interfaces;
 using Microsoft.EntityFrameworkCore;
 using ModelLayer;
@@ -12,26 +14,28 @@ namespace BusinessLogicLayer
     public class BusinessLogicClass
     {
         private readonly Repository _repository;
-        private readonly MapperClass _mapperClass;
+        private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
 
-        public BusinessLogicClass(Repository repository, MapperClass mapperClass, ITokenService tokenService)
+        public BusinessLogicClass(Repository repository, IMapper mapper, ITokenService tokenService)
         {
             _repository = repository;
-            _mapperClass = mapperClass;
+            _mapper = mapper;
             _tokenService = tokenService;
         }
 
         // Get all users
-        public async Task<IEnumerable<AppUser>> GetUsers()
+        public async Task<IEnumerable<MemberDto>> GetUsersAsync()
         {
-            return await _repository.GetUsers();
+            var users = await _repository.GetUsersAsync();
+            return _mapper.Map<IEnumerable<MemberDto>>(users);
         }
 
         // Get a single user
-        public async Task<AppUser> GetUser(int id)
+        public async Task<MemberDto> GetUserByUsernameAsync(string username)
         {
-            return await _repository.GetUser(id);
+            var user = await _repository.GetUserByUsernameAsync(username);
+            return _mapper.Map<MemberDto>(user);
         }
 
         // Register a new user
@@ -52,7 +56,7 @@ namespace BusinessLogicLayer
             user = await _repository.Register(user);
 
             // Map returned user to UserDto
-            var registeredUser = _mapperClass.ConvertAppUserToUserDto(user);
+            var registeredUser = _mapper.Map<UserDto>(user);
             registeredUser.Token = _tokenService.CreateToken(user);
 
             // Return the newly created user
@@ -68,7 +72,7 @@ namespace BusinessLogicLayer
         public Task<UserDto> CheckPassword(AppUser user, string password)
         {
             // Convert AppUser to UserDto
-            UserDto udto = _mapperClass.ConvertAppUserToUserDto(user);
+            UserDto udto = _mapper.Map<UserDto>(user);
 
             // Instantiate an hmac security
             using var hmac = new HMACSHA512(user.PasswordSalt);

@@ -1,4 +1,4 @@
-namespace ModelLayer
+namespace DTOs
 {
     public class UserDto
     {

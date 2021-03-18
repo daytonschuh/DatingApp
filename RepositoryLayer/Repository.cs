@@ -19,14 +19,16 @@ namespace RepositoryLayer
             users = _applicationDbContext.Users;
         }
 
-        public async Task<IEnumerable<AppUser>> GetUsers()
+        public async Task<IEnumerable<AppUser>> GetUsersAsync()
         {
-            return await users.ToListAsync();
+            // eager loading with .include
+            // since photos returns an appuser and appuser returns photos, we create a circular exception
+            return await users.Include(p=> p.Photos).ToListAsync();
         }
 
-        public async Task<AppUser> GetUser(int id)
+        public async Task<AppUser> GetUserByUsernameAsync(string username)
         {
-            return await users.FindAsync(id);
+            return await users.Include(p=> p.Photos).SingleOrDefaultAsync(x => x.UserName == username);
         }
 
         public async Task<AppUser> Register(AppUser user)

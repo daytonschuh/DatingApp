@@ -27,7 +27,7 @@ namespace Controllers
         [HttpGet("not-found")]
         public async Task<ActionResult<string>> GetNotFound()
         {
-            var thing = await _businessLogicClass.GetUser(-1);
+            var thing = await _businessLogicClass.GetUserByUsernameAsync("");
 
             if (thing == null) return NotFound();
 
@@ -37,7 +37,7 @@ namespace Controllers
         [HttpGet("server-error")]
         public async Task<ActionResult<string>> GetServerError()
         {
-            var thing = await _businessLogicClass.GetUser(-1);
+            var thing = await _businessLogicClass.GetUserByUsernameAsync("");
 
             var thingToReturn = thing.ToString();
 

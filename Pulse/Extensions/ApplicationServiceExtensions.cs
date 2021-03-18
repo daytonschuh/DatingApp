@@ -17,12 +17,12 @@ namespace Extensions
             {
                 options.UseSqlite(config.GetConnectionString("DefaultConnection"));
             });
-            services.AddScoped<MapperClass>();
             services.AddScoped<Repository>();
             services.AddScoped<BusinessLogicClass>();
             services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IUserRepository, UserRepository>();
-
+            services.AddAutoMapper(typeof(AutoMappeProfiles).Assembly);
+            
             return services;
         }
     }

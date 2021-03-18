@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
 using Interfaces;
+using DTOs;
 
 namespace Controllers
 {

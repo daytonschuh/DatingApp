@@ -5,6 +5,7 @@ using ModelLayer;
 using BusinessLogicLayer;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using DTOs;
 
 namespace Controllers
 {
@@ -19,17 +20,16 @@ namespace Controllers
 
         // Get all users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsersAsync()
         {
-            return Ok(await _businessLogicClass.GetUsers());
+            return Ok(await _businessLogicClass.GetUsersAsync());
         }
 
         // Get a single user
-        [Authorize]
-        [HttpGet("{id}")]
-        public async Task<AppUser> GetUser(int id)
+        [HttpGet("{username}")]
+        public async Task<MemberDto> GetUserByUsernameAsync(string username)
         {
-            return await _businessLogicClass.GetUser(id);
+            return await _businessLogicClass.GetUserByUsernameAsync(username);
         }
     }
 }
