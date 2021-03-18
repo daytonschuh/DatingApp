@@ -27,8 +27,7 @@ namespace BusinessLogicLayer
         // Get all users
         public async Task<IEnumerable<MemberDto>> GetUsersAsync()
         {
-            var users = await _repository.GetUsersAsync();
-            return _mapper.Map<IEnumerable<MemberDto>>(users);
+            return await _repository.GetUsersAsync();
         }
 
         // Get a single user
